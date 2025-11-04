@@ -1,10 +1,14 @@
 const express = require("express")
 const app = express()
+const cors = require("cors")
+app.use(cors())
 
 app.get("/",(req,res)=>{
-    res.send("Working")
+    res.status(200).send("Working")
 })
 
-app.listen(3000,()=>{
-    console.log("Server started")
+const port = process.env.PORT || 10000
+
+app.listen(port,()=>{
+    console.log("Server started at " + port)
 })
