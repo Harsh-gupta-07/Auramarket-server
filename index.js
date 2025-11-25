@@ -3,7 +3,6 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const app = express();
 const cors = require("cors");
-const { PrismaClient } = require("@prisma/client");
 const { isStrongPassword } = require("./middleware/passwordValidator");
 const jwt = require("jsonwebtoken");
 const { UserDB } = require("./db/user/config");
