@@ -15,8 +15,11 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index",
+    "generate:products": "prisma generate --schema=db/products/schema.prisma",
+    "generate:user": "prisma generate --schema=db/user/schema.prisma",
+    "generate": "npm run generate:products && npm run generate:user",
+    "build": "npm run generate && echo \"build completed\"",
+    "start": "node index.js",
     "dev": "nodemon index"
   },
   "dependencies": {
