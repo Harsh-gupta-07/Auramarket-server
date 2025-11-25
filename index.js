@@ -24,10 +24,13 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/products", async (req, res) => {
+  const { page = 1, limit = 15 } = req.query;
   try {
     const products = await ProductDB.product.findMany({
-      take: 10,
+      take: parseInt(limit, 10),
+      skip: (parseInt(page, 10) - 1) * parseInt(limit, 10),
       select: {
+        id: true,
         title: true,
         price: true,
         mainCategory: true,
@@ -45,6 +48,7 @@ app.get("/products", async (req, res) => {
     });
 
     const formatted = products.map((product) => ({
+      id: product.id,
       name: product.title,
       price: product.price,
       image: product.images[0]?.hiRes || null,
