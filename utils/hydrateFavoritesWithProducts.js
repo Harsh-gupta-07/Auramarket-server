@@ -1,12 +1,17 @@
 const { ProductDB } = require("../db/products/config");
 
-const hydrateOrdersWithProducts = async (orders) => {
-  if (!orders.length) {
+const hydrateFavoritesWithProducts = async (favorites) => {
+  if (!favorites || !favorites.length) {
     return [];
   }
 
+  // Extract product IDs, converting strings to integers
   const productIds = [
-    ...new Set(orders.map((order) => order.productID).filter(Boolean)),
+    ...new Set(
+      favorites
+        .map((fav) => parseInt(fav.product, 10))
+        .filter((id) => !isNaN(id))
+    ),
   ];
 
   let productMap = new Map();
@@ -42,15 +47,13 @@ const hydrateOrdersWithProducts = async (orders) => {
     );
   }
 
-  return orders.map((order) => ({
-    id: order.id,
-    quantity: order.quantity,
-    status: order.status,
-    orderedAt: order.createdAt,
-    product: productMap.get(order.productID) || null,
-  }));
+  return favorites.map((fav) => {
+    const productId = parseInt(fav.product, 10);
+    return {
+      id: fav.id,
+      product: productMap.get(productId) || null,
+    };
+  });
 };
 
-module.exports = { hydrateOrdersWithProducts };
-
-
+module.exports = { hydrateFavoritesWithProducts };
