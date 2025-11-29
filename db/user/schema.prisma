@@ -13,4 +13,48 @@ model User{
     email String @unique
     name String
     password String
+    addresses  Address[]
+    favourites Favourite[]
+    cart       Cart[]
+    orders     Orders[]
+}
+
+model Address {
+  id           Int    @id @default(autoincrement())
+  label        String
+  name         String
+  addressLine  String
+  cityLine     String
+  phone        String
+  instructions String?
+  isPrimary    Boolean @default(false)
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+model Favourite {
+  id      Int    @id @default(autoincrement())
+  product String
+  user    User   @relation(fields: [userId], references: [id])
+  userId  Int
+}
+
+model Cart {
+  id       Int    @id @default(autoincrement())
+  productID  Int
+  quantity Int
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+model Orders {
+  id        Int     @id @default(autoincrement())
+  productID     Int
+  quantity     Int
+  createdAt DateTime @default(now())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 }
