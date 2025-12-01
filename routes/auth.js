@@ -6,7 +6,6 @@ const { isStrongPassword } = require("../middleware/passwordValidator");
 
 const router = express.Router();
 
-// POST /api/login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const details = await UserDB.User.findUnique({
@@ -33,7 +32,6 @@ router.post("/login", async (req, res) => {
   res.status(200).json({ status: "success", token });
 });
 
-// POST /api/signup
 router.post("/signup", isStrongPassword, async (req, res) => {
   const { name, email, password } = req.body;
   const existingUser = await UserDB.User.findUnique({

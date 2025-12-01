@@ -3,7 +3,6 @@ const { ProductDB } = require("../db/products/config");
 
 const router = express.Router();
 
-// GET /api/ - basic price range aggregate (existing root behavior)
 router.get("/", async (req, res) => {
   const result = await ProductDB.product.aggregate({
     _min: {
@@ -16,7 +15,6 @@ router.get("/", async (req, res) => {
   res.json(result);
 });
 
-// GET /api/products
 router.get("/products", async (req, res) => {
   const { page = 1, limit = 15 } = req.query;
   try {
@@ -59,7 +57,6 @@ router.get("/products", async (req, res) => {
   }
 });
 
-// GET /api/distinct-categories
 router.get("/distinct-categories", async (req, res) => {
   try {
     const categories = await ProductDB.product.findMany({
@@ -78,7 +75,6 @@ router.get("/distinct-categories", async (req, res) => {
   }
 });
 
-// GET /api/product/:id
 router.get("/product/:id", async (req, res) => {
   try {
     const { id } = req.params;
