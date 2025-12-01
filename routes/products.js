@@ -16,11 +16,68 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/products", async (req, res) => {
-  const { page = 1, limit = 15 } = req.query;
+  const {
+    page = 1,
+    limit = 15,
+    categories,
+    minPrice,
+    maxPrice,
+    minRating,
+    sortBy,
+    keyword,
+  } = req.query;
+
+  console.log(req.query);
+
   try {
+    const where = {};
+
+    if (categories) {
+      const categoryArray = Array.isArray(categories)
+        ? categories
+        : [categories];
+      where.mainCategory = { in: categoryArray };
+    }
+
+    if (minPrice || maxPrice) {
+      where.price = {};
+      if (minPrice) where.price.gte = parseFloat(minPrice);
+      if (maxPrice) where.price.lte = parseFloat(maxPrice);
+    }
+
+    if (minRating) {
+      where.averageRating = { gte: parseFloat(minRating) };
+    }
+
+    if (keyword) {
+      where.title = { contains: keyword, mode: "insensitive" };
+    }
+
+    let orderBy = { id: "asc" };
+    if (sortBy) {
+      switch (sortBy) {
+        case "id_desc":
+          orderBy = { id: "desc" };
+          break;
+        case "price_desc":
+          orderBy = { price: "desc" };
+          break;
+        case "price_asc":
+          orderBy = { price: "asc" };
+          break;
+        case "rating":
+          orderBy = { averageRating: "desc" };
+          break;
+        default:
+          orderBy = { id: "asc" };
+      }
+    }
+
     const products = await ProductDB.product.findMany({
       take: parseInt(limit, 10),
       skip: (parseInt(page, 10) - 1) * parseInt(limit, 10),
+      where,
+      orderBy,
       select: {
         id: true,
         title: true,
@@ -34,9 +91,6 @@ router.get("/products", async (req, res) => {
           take: 1,
         },
       },
-      orderBy: {
-        id: "asc",
-      },
     });
 
     const formatted = products.map((product) => ({
@@ -48,12 +102,54 @@ router.get("/products", async (req, res) => {
       averageRating: product.averageRating,
     }));
 
-    res.json(formatted);
+    res.json({ success: true, data: formatted });
   } catch (error) {
     console.error("Failed to fetch products", error);
     res
       .status(500)
       .json({ success: false, message: "Unable to fetch products" });
+  }
+});
+
+router.get("/top-rated", async (req, res) => {
+  try {
+    const products = await ProductDB.product.findMany({
+      take: 6,
+      orderBy: {
+        ratingNumber: "desc",
+      },
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        mainCategory: true,
+        averageRating: true,
+        ratingNumber: true,
+        images: {
+          select: {
+            hiRes: true,
+          },
+          take: 1,
+        },
+      },
+    });
+
+    const formatted = products.map((product) => ({
+      id: product.id,
+      name: product.title,
+      price: product.price,
+      image: product.images[0]?.hiRes || null,
+      mainCategory: product.mainCategory,
+      averageRating: product.averageRating,
+      ratingNumber: product.ratingNumber,
+    }));
+
+    res.json({ success: true, data: formatted });
+  } catch (error) {
+    console.error("Failed to fetch top rated products", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Unable to fetch top rated products" });
   }
 });
 
@@ -95,6 +191,7 @@ router.get("/product/:id", async (req, res) => {
     return res.status(500).json({ success: false, message: err.message });
   }
 });
+
 
 module.exports = router;
 

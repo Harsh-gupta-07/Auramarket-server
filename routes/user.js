@@ -126,10 +126,6 @@ router.put("/user/update", authenticate, async (req, res) => {
   }
 });
 
-
-
-
-
 module.exports = router;
 
 
