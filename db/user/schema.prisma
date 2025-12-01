@@ -13,6 +13,7 @@ model User{
     email String @unique
     name String
     password String
+    role String @default("user")
     addresses  Address[]
     favourites Favourite[]
     cart       Cart[]
