@@ -18,7 +18,12 @@ router.get("/orders", authenticate, isAdmin, async (req, res) => {
                 },
             },
         });
-        res.status(200).json({ status: "success", orders });
+        const formattedOrders = orders.map(order => ({
+            ...order,
+            productId: order.productID,
+            quantity: order.quantity
+        }));
+        res.status(200).json({ status: "success", orders: formattedOrders });
     } catch (err) {
         console.error("Fetch orders error:", err);
         res.status(500).json({ status: "failed", message: "Failed to fetch orders." });

@@ -27,7 +27,7 @@ router.get("/products", async (req, res) => {
     keyword,
   } = req.query;
 
-  console.log(req.query);
+  // console.log(req.query);
 
   try {
     const where = {};
