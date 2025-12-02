@@ -45,7 +45,6 @@ router.put("/default", authenticate, async (req, res) => {
 
 
 
-// DELETE /api/address/remove
 router.delete("/remove", authenticate, async (req, res) => {
     const { addressId } = req.body;
 

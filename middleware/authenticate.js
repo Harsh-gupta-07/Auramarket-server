@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 
-// Central auth middleware to keep token handling consistent across routes.
 const authenticate = (req, res, next) => {
   const authHeader = req.header("Authorization");
 
@@ -26,5 +25,3 @@ const authenticate = (req, res, next) => {
 };
 
 module.exports = { authenticate };
-
-

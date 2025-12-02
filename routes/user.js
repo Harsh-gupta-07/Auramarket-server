@@ -84,6 +84,11 @@ router.get("/me", authenticate, async (req, res) => {
 
     return res.json({
       success: true,
+      token: jwt.sign(
+        { id: user.id, email: user.email, name: user.name },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+      ),
       user: {
         id: user.id,
         name: user.name,

@@ -45,7 +45,11 @@ const hydrateOrdersWithProducts = async (orders) => {
   return orders.map((order) => {
     const fourDaysInMs = 4 * 24 * 60 * 60 * 1000;
     const isDelivered = new Date() - new Date(order.createdAt) > fourDaysInMs;
-    const status = isDelivered ? "Delivered" : "In Transit";
+    let status = order.status;
+
+    if (status !== "Cancelled") {
+      status = isDelivered ? "Delivered" : "In Transit";
+    }
 
     return {
       id: order.id,

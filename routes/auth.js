@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  console.log(email, password);
   const details = await UserDB.User.findUnique({
     where: { email: email.toLowerCase() },
   });
@@ -24,7 +25,7 @@ router.post("/login", async (req, res) => {
       .json({ status: "failed", message: "Invalid Password." });
   }
   const token = jwt.sign(
-    { id: details.id, email: details.email },
+    { id: details.id, email: details.email, name: details.name },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
@@ -54,7 +55,7 @@ router.post("/signup", isStrongPassword, async (req, res) => {
     });
 
     const token = jwt.sign(
-      { id: response.id, email: response.email },
+      { id: response.id, email: response.email, name: response.name },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );

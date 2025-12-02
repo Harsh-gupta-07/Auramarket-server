@@ -58,7 +58,7 @@ model Orders {
   quantity     Int
   createdAt DateTime @default(now())
   status      String @default("Pending")
-
+  addressID Int?
   user   User @relation(fields: [userId], references: [id])
   userId Int
 }

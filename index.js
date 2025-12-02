@@ -8,6 +8,8 @@ const userRoutes = require("./routes/user");
 const addressRoutes = require("./routes/addresses");
 const favouritesRoutes = require("./routes/favourites");
 const cartRoutes = require("./routes/cart");
+const ordersRoutes = require("./routes/orders");
+const adminRoutes = require("./routes/admin");
 const app = express();
 
 app.use(cors());
@@ -19,6 +21,8 @@ app.use("/api", userRoutes);
 app.use("/api/address", addressRoutes);
 app.use("/api/favourites", favouritesRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", ordersRoutes);
+app.use("/api/admin", adminRoutes);
 
 const port = process.env.PORT || 10000;
 
