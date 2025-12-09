@@ -79,7 +79,7 @@ router.delete("/remove", authenticate, async (req, res) => {
 });
 
 router.put("/update", authenticate, async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const {
         id,
         label,

@@ -21,6 +21,8 @@ model Product {
   parentAsin     String?
   description    Json?
   features       Json?
+  deleted Boolean @default(false)
+
 
   images         Image[]
   categories     Category[]
