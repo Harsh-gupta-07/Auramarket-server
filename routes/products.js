@@ -4,15 +4,7 @@ const { ProductDB } = require("../db/products/config");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const result = await ProductDB.product.aggregate({
-    _min: {
-      price: true,
-    },
-    _max: {
-      price: true,
-    },
-  });
-  res.json(result);
+  res.json({status: "OK"});
 });
 
 router.get("/products", async (req, res) => {
