@@ -24,8 +24,11 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", ordersRoutes);
 app.use("/api/admin", adminRoutes);
 
-const port = process.env.PORT || 10000;
+module.exports = app;
 
-app.listen(port, () => {
-  console.log("Server started at " + port);
-});
+if (require.main === module) {
+  const port = process.env.PORT || 10000;
+  app.listen(port, () => {
+    console.log("Server started at " + port);
+  });
+}
